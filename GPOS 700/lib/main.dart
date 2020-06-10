@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gertec/CodigoDeBarraV1.dart';
-import 'package:flutter_gertec/imprimir.dart';
-import 'package:flutter_gertec/lerCartaoID.dart';
+import 'package:flutter_gertec/pages/CodigoDeBarraV1.dart';
+import 'package:flutter_gertec/pages/imprimir.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'lerCartaoGEDI.dart';
+import 'pages/lerCartaoGEDI.dart';
+import 'pages/lerCartaoID.dart';
+import 'pages/tefs.dart';
 
 void main() => runApp(MyApp());
 
@@ -42,12 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   var newTaskCtrl = TextEditingController();
-  var Lista_nome_funcoes = [
+  var listaNomeFuncoes = [
     {"name": "Código de Barras", "img": "assets/barcode.png"},
     {"name": "Código de Barras V2", "img": "assets/qr_code.png"},
     {"name": "Impressão", "img": "assets/print.png"},
     {"name": "NFC GEDI", "img": "assets/nfc.png"},
     {"name": "NFC Id", "img": "assets/nfc1.png"},
+    {"name": "TEF", "img": "assets/pos-terminal.png"},
   ];
   void trocarTela(int id) {
     switch (id) {
@@ -77,6 +79,12 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => PageLeituraCartaoID()),
+        );
+        break;
+      case 5:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PageTef()),
         );
         break;
     }
@@ -114,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: new ListView.builder(
               shrinkWrap: true,
-              itemCount: Lista_nome_funcoes.length,
+              itemCount: listaNomeFuncoes.length,
               itemExtent: 80,
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
@@ -125,14 +133,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: ListTile(
                     dense: true,
                     leading: Image(
-                      image: AssetImage(Lista_nome_funcoes[index]["img"]),
+                      image: AssetImage(listaNomeFuncoes[index]["img"]),
                     ),
                     onTap: () {
                       trocarTela(index);
                     },
                     title: Center(
                       child: Text(
-                        Lista_nome_funcoes[index]["name"],
+                        listaNomeFuncoes[index]["name"],
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: ScreenUtil.instance.setSp(20.0),

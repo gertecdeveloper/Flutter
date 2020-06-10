@@ -1,16 +1,27 @@
 package com.example.flutter_gertec;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.widget.Toast;
+
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Map;
+
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
@@ -28,9 +39,11 @@ public class MainActivity extends FlutterActivity {
     private IntentIntegrator qrScan;
     private String tipo;
     private ArrayList<String> arrayListTipo;
-    private static final String[] CHANNEL = { "samples.flutter.dev/gedi" };
+    private static final String CHANNEL =  "samples.flutter.dev/gedi" ;
     private ConfigPrint configPrint = new ConfigPrint();
-
+    Intent intentGer7 = new Intent(Intent.ACTION_VIEW, Uri.parse("pos7api://pos7"));
+    Intent intentSitef = new Intent("br.com.softwareexpress.sitef.msitef.ACTIVITY_CLISITEF");
+    Gson gson = new Gson();
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         gertecPrinter.setConfigImpressao(configPrint);
@@ -44,9 +57,12 @@ public class MainActivity extends FlutterActivity {
 
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine);
-        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL[0])
+        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
                 .setMethodCallHandler((call, result) -> {
                     _result = result;
+                    String json = null;
+                    Map<String, String> map;
+                    Bundle bundle = new Bundle();
                     Intent intent = null;
                     switch (call.method) {
                         case "lernfcid":
@@ -86,6 +102,19 @@ public class MainActivity extends FlutterActivity {
                         case "leitorCodigoV2":
                             intent = new Intent(this, CodigoBarrasV2.class);
                             startActivity(intent);
+                            break;
+                        case "realizarAcaoGer7":
+                            json = call.argument("json");
+                            intentGer7.putExtra("jsonReq", json);
+                            startActivityForResult(intentGer7, 4713);
+                            break;
+                        case "realizarAcaoMsitef":
+                            map = call.argument("mapMsiTef");
+                            for (String key : map.keySet() ) {
+                                bundle.putString(key, map.get(key));
+                            }
+                            intentSitef.putExtras(bundle);
+                            startActivityForResult(intentSitef, 4321);
                             break;
                         case "imprimir":
                             try {
@@ -293,6 +322,25 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
+    public String respSitefToJson(Intent data) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("CODRESP",data.getStringExtra("CODRESP"));
+        json.put("COMP_DADOS_CONF",data.getStringExtra("COMP_DADOS_CONF"));
+        json.put("CODTRANS",data.getStringExtra("CODTRANS"));
+        json.put("VLTROCO",data.getStringExtra("VLTROCO"));
+        json.put("REDE_AUT",data.getStringExtra("REDE_AUT"));
+        json.put("BANDEIRA",data.getStringExtra("BANDEIRA"));
+        json.put("NSU_SITEF",data.getStringExtra("NSU_SITEF"));
+        json.put("NSU_HOST",data.getStringExtra("NSU_HOST"));
+        json.put("COD_AUTORIZACAO",data.getStringExtra("COD_AUTORIZACAO"));
+        json.put("NUM_PARC",data.getStringExtra("NUM_PARC"));
+        json.put("TIPO_PARC",data.getStringExtra("TIPO_PARC"));
+        json.put("VIA_ESTABELECIMENTO",data.getStringExtra("VIA_ESTABELECIMENTO"));
+        json.put("VIA_CLIENTE",data.getStringExtra("VIA_CLIENTE"));
+
+        return json.toString();
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 109) {
             if (resultCode == RESULT_OK && data != null) {
@@ -306,15 +354,31 @@ public class MainActivity extends FlutterActivity {
             } else {
                 _result.notImplemented();
             }
-        } else {
+        } else if(requestCode == 4713){
+            if (resultCode == RESULT_OK && data != null) {
+                _result.success( gson.toJson(data.getStringExtra("jsonResp")));
+            } else {
+                _result.notImplemented();
+            }
+        } else if(requestCode == 4321){
+            if (resultCode == RESULT_OK || resultCode == RESULT_CANCELED && data != null) {
+                try {
+                    _result.success(respSitefToJson(data));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "m-SiTef Outro Codigo", Toast.LENGTH_LONG).show();
+                _result.notImplemented();
+            }
+        }
+
+        else {
             IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (intentResult != null) {
-                // if qrcode has nothing in it
                 if (intentResult.getContents() == null) {
-                    // Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
                     resultado_Leitor = (this.tipo + ": Não foi possível ler o código.\n");
                 } else {
-                    // if qr contains data
                     try {
                         resultado_Leitor = this.tipo + ": " + intentResult.getContents() + "\n";
                     } catch (Exception e) {
