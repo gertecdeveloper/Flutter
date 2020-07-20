@@ -75,7 +75,7 @@ public class LeitorNFC extends AppCompatActivity {
             intent.putExtra("codigoNFCID", idCartao().toString());
             setResult(RESULT_OK, intent);
             finish();
-        }else if(IsoDep.get(tag)!=null){
+        } else if (IsoDep.get(tag) != null) {
             isoDep = IsoDep.get(tag);
             intent.putExtra("codigoNFCID", idCartao().toString());
             setResult(RESULT_OK, intent);
@@ -88,9 +88,9 @@ public class LeitorNFC extends AppCompatActivity {
         byte[] idCartao = null;
         long result = 0;
 
-        if(mifareClassic != null){
+        if (mifareClassic != null) {
             idCartao = mifareClassic.getTag().getId();
-        }else if (isoDep != null){
+        } else if (isoDep != null) {
             idCartao = isoDep.getTag().getId();
         }
 

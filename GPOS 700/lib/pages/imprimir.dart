@@ -8,7 +8,7 @@ class PageImprimir extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'GertecOne Flutter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -67,20 +67,33 @@ class _Imprimir extends State<Imprimir> {
     );
   }
 
-  Future<void> _impressaoDeTexto(String texto, int fontSize, String alinhar,
-      String fontFamily, List<bool> selectedOptions) async {
+  // Função responsavel por finalizar impressao - ImpressoraOutput();
+  void finalizarImpressao() async {
+    await platform.invokeMethod('fimimpressao');
+  }
+
+  void impressaoDeTexto(
+      {String texto,
+      int fontSize,
+      String alinhar,
+      String fontFamily,
+      List<bool> selectedOptions}) async {
+    texto = texto ?? ""; // Caso seja null
     if (texto.isEmpty) {
       erroImpresao();
     } else {
       try {
-        await platform.invokeMethod('imprimir', <String, dynamic>{
-          "tipoImpressao": "Texto",
-          "mensagem": texto,
-          "alinhar": alinhar,
-          "size": fontSize,
-          "font": fontFamily,
-          "options": selectedOptions
-        });
+        await platform.invokeMethod(
+          'imprimir',
+          <String, dynamic>{
+            "tipoImpressao": "Texto",
+            "mensagem": texto,
+            "alinhar": alinhar ?? "CENTER",
+            "size": fontSize ?? 10,
+            "font": fontFamily ?? "DEFAULT",
+            "options": selectedOptions ?? [false, false, false]
+          },
+        );
       } on PlatformException catch (e) {
         print(e.message);
       }
@@ -97,7 +110,7 @@ class _Imprimir extends State<Imprimir> {
     }
   }
 
-  Future<void> _impressaoDeImagem(String img) async {
+  Future<void> _impressaoDeImagem() async {
     try {
       await platform.invokeMethod('imprimir', <String, dynamic>{
         "tipoImpressao": "Imagem",
@@ -108,14 +121,15 @@ class _Imprimir extends State<Imprimir> {
   }
 
   Future<void> _impressaoDeCodigoDeBarra(
-      String texto, int height, int width, String barCode) async {
+      {String texto, int height, int width, String barCode}) async {
+    texto = texto ?? ""; // Caso seja null
     if (texto.isNotEmpty) {
       try {
         await platform.invokeMethod('imprimir', <String, dynamic>{
           "tipoImpressao": "CodigoDeBarra",
-          "height": height,
-          "width": width,
-          "barCode": barCode,
+          "height": height ?? 200,
+          "width": width ?? 200,
+          "barCode": barCode ?? "QR_CODE",
           "mensagem": texto
         });
       } on PlatformException catch (e) {
@@ -126,7 +140,7 @@ class _Imprimir extends State<Imprimir> {
     }
   }
 
-  Future<String> get _checarImpressora async {
+  Future<String> checarImpressora() async {
     try {
       bool impressora = await platform.invokeMethod('checarImpressora');
       if (impressora == true)
@@ -136,6 +150,7 @@ class _Imprimir extends State<Imprimir> {
     } on PlatformException catch (e) {
       print(e.message);
     }
+    return "Erro";
   }
 
   Widget build(BuildContext context) {
@@ -173,7 +188,7 @@ class _Imprimir extends State<Imprimir> {
                 child: RaisedButton(
                   child: Text("STATUS IMPRESSORA"),
                   onPressed: () {
-                    _checarImpressora.then((value) {
+                    checarImpressora().then((value) {
                       setState(() {
                         showDialog(
                           context: context,
@@ -364,12 +379,15 @@ class _Imprimir extends State<Imprimir> {
                         style: TextStyle(fontSize: 12),
                       ),
                       onPressed: () {
-                        _impressaoDeTexto(
-                            myController.value.text.toString(),
-                            dropdownValueSize,
-                            alinhar,
-                            dropdownFont,
-                            listSelecionado);
+                        // Não precisa passar todos os parâmetros - Sera dado o valor DEFAULT
+                        impressaoDeTexto(
+                          texto: myController.text,
+                          fontSize: dropdownValueSize,
+                          alinhar: alinhar,
+                          fontFamily: dropdownFont,
+                          selectedOptions: listSelecionado,
+                        );
+                        finalizarImpressao(); // Limpa buffer de impressão
                       },
                     ),
                   ),
@@ -381,7 +399,8 @@ class _Imprimir extends State<Imprimir> {
                         style: TextStyle(fontSize: 12),
                       ),
                       onPressed: () {
-                        _impressaoDeImagem("logogertec");
+                        _impressaoDeImagem();
+                        finalizarImpressao(); // Limpa buffer de impressão
                       },
                     ),
                   ),
@@ -486,11 +505,14 @@ class _Imprimir extends State<Imprimir> {
                     style: TextStyle(fontSize: 15),
                   ),
                   onPressed: () {
+                    // Não precisa passar todos os parâmetros - Sera dado o valor DEFAULT
                     _impressaoDeCodigoDeBarra(
-                        myController.value.text.toString(),
-                        dropdownBarHeight,
-                        dropdownBarWidth,
-                        dropdownBarType);
+                      texto: myController.value.text.toString(),
+                      height: dropdownBarHeight,
+                      width: dropdownBarWidth,
+                      barCode: dropdownBarType,
+                    );
+                    finalizarImpressao(); // Limpa buffer de impressão
                   },
                 ),
               ),
@@ -503,6 +525,7 @@ class _Imprimir extends State<Imprimir> {
                   ),
                   onPressed: () {
                     _impressaoTodasFuncoes();
+                    finalizarImpressao(); // Limpa buffer de impressão
                   },
                 ),
               ),

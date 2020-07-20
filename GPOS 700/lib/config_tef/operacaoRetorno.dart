@@ -1,4 +1,4 @@
-///Classe de retorno, utilizada para atribuir o resultado do Tef para um Json.
+/// Classe de retorno, utilizada para atribuir o resultado do Tef Ger7 para um Json.
 class RetornoGer7 {
   String _version;
   String _status;
@@ -285,6 +285,7 @@ class RetornoGer7 {
   }
 }
 
+/// Classe de retorno, utilizada para atribuir o resultado do M-Sitef para um Json.
 class RetornoMsiTef {
   String _cODRESP;
   String _cOMPDADOSCONF;
@@ -365,8 +366,8 @@ class RetornoMsiTef {
   }
 
   get getCodAutorizacao => _cODAUTORIZACAO ?? "";
-  get textoImpressoEstabelecimento => _viaESTABELECIMENTO ?? "";
-  get textoImpressoCliente => _viaCLIENTE ?? "";
+  String get textoImpressoEstabelecimento => _viaESTABELECIMENTO ?? "";
+  String get textoImpressoCliente => _viaCLIENTE ?? "";
   get getCompDadosConf => _cOMPDADOSCONF ?? "";
   get getCodResp => _cODRESP ?? "";
   get getRedeAut => _rEDEAUT ?? "";

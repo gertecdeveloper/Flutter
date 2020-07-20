@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="voce_esta_na_tela_de_ler">Voce Esta na Tela de Ler</string>
+    <string name="app_name">Gertec Flutter</string>
 </resources>

@@ -6,7 +6,7 @@ class PageLeituraCartaoID extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'GertecOne Flutter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

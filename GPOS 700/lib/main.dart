@@ -5,7 +5,7 @@ import 'package:flutter_gertec/pages/imprimir.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'pages/lerCartaoGEDI.dart';
 import 'pages/lerCartaoID.dart';
-import 'pages/tefs.dart';
+import 'pages/menus/tefs.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'GertecOne Flutter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'GertecOne Flutter'),
     );
   }
 }

@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.flutter_gertec">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.NFC" />
 
     <uses-feature android:name="android.hardware.nfc" />
-    <uses-feature
-        android:name="android.hardware.camera.any"
-        android:required="true" />
+
+    <uses-feature android:name="android.hardware.camera.any" android:required="true" />
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:icon="@mipmap/ic_launcher"
-        android:label="flutter_gertec">
-        <activity android:name=".LeitorNFC" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".NfcExemploGedi" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        android:icon="@mipmap/gertec_one"
+        tools:replace="android:icon , android:label"
+        android:label="GertecOne Flutter">
+
+    <activity android:name=".LeitorNFC" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".NfcExemploGedi" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".CodigoBarrasV2"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -32,23 +36,23 @@
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:windowSoftInputMode="adjustResize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
+
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:scheme="*" />
             </intent-filter>
-        </activity>
 
+         </activity>
         <meta-data
             android:name="android.nfc.action.TECH_DISCOVERED"
             android:resource="@xml/nfc_tech_filter" />
