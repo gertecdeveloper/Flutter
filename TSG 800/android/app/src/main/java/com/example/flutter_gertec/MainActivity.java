@@ -1,10 +1,10 @@
 package com.example.flutter_gertec;
 
 import android.content.Intent;
-import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+
+import java.io.IOException;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,27 +21,33 @@ import static android.hardware.Camera.Parameters.FLASH_MODE_ON;
 
 public class MainActivity extends FlutterActivity {
     private GertecPrinter gertecPrinter;
-    public static final String G700 = "GPOS700";
-    public static final String G800 = "Smart G800";
-    private static final String version = "RC03";
-    private MethodChannel.Result _result; // private NfcAdapter nfcAdapter;
-    public static String Model = Build.MODEL;
-    private String resultado_Leitor;
+    private MethodChannel.Result _result; // Instanciando uma variavel do tipo Result, para enviar o resultado para o
+                                          // flutter
+    private String resultado_Leitor; // Instanciando uma variavel que vai armazenar o resultado ao ler o codigo de
+                                     // Barras no V1
     private IntentIntegrator qrScan;
-    private String tipo;
+    private String tipo; // Armazerna o tipo de codigo de barra que deseja ser lido
     private ArrayList<String> arrayListTipo;
-    private static final String[] CHANNEL = { "samples.flutter.dev/gedi" };
+    private static final String[] CHANNEL = { "samples.flutter.dev/gedi" }; // Canal de comunicação do flutter com o
+                                                                            // Java
     private ConfigPrint configPrint = new ConfigPrint();
+    private SatLib satLib;
+
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         gertecPrinter.setConfigImpressao(configPrint);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gertecPrinter = new GertecPrinter(this.getActivity());
+        satLib = new SatLib(this);
+    }
+
     public MainActivity() {
         super();
         this.arrayListTipo = new ArrayList<String>();
-        System.out.println("GPOS800");
-        gertecPrinter = new GertecPrinter(this.getActivity());
     }
 
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
@@ -49,28 +55,32 @@ public class MainActivity extends FlutterActivity {
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL[0])
                 .setMethodCallHandler((call, result) -> {
                     _result = result;
-                    Intent intent = null;
+                    Intent intent;
                     switch (call.method) {
+                        // Inicia o intent que vai fazer a leitura do Nfc
                         case "lerNfc":
                             try {
                                 intent = new Intent(this, NfcLeitura.class);
-                                startActivity(intent);
+                                startActivityForResult(intent, 111);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 result.notImplemented();
                             }
                             break;
+                        // Inicia o intent que vai fazer a gravação no Cartão
+                        // A mensagem que vai ser gravada é enviada do flutter
                         case "gravarNfc":
                             String mensagemGravar = call.argument("mensagemGravar");
                             try {
                                 intent = new Intent(this, NfcGravacao.class);
-                                intent.putExtra("mensagemGravar",mensagemGravar);
+                                intent.putExtra("mensagemGravar", mensagemGravar);
                                 startActivity(intent);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 result.notImplemented();
                             }
                             break;
+                        // Inicia o intent que vai fazer a formatação do cartão Nfc
                         case "formatarNfc":
                             try {
                                 intent = new Intent(this, NfcFormatar.class);
@@ -80,6 +90,7 @@ public class MainActivity extends FlutterActivity {
                                 result.notImplemented();
                             }
                             break;
+                        // Inicia o intent que vai fazer o teste de leitura e gravação no cartão Nfc
                         case "testeNfc":
                             try {
                                 intent = new Intent(this, NfcLerGravar.class);
@@ -97,6 +108,8 @@ public class MainActivity extends FlutterActivity {
                                 e.printStackTrace();
                             }
                             break;
+                        // Inicia a função que vai abrir o leitor de codigo de barra
+                        // Do flutter ele vai pegar o "tipo" de codigo que deseja ser lido
                         case "leitorCodigov1":
                             try {
                                 tipo = call.argument("tipoLeitura");
@@ -105,9 +118,89 @@ public class MainActivity extends FlutterActivity {
                                 e.printStackTrace();
                             }
                             break;
+                        // Verifica qual ação do Sat foi solicitada e retorna o codigo de resposta da
+                        // Sefaz
+                        // "satLib" possui todas funções do Sat
+
+                        case "AtivarSAT":
+                            _result.success(satLib.ativarSat(call.argument("codigoAtivar"), call.argument("cnpj"),
+                                    call.argument("random")));
+                            break;
+                        case "AssociarSAT":
+                            _result.success(satLib.associarSat(call.argument("cnpj"), call.argument("cnpjSoft"),
+                                    call.argument("codigoAtivar"), call.argument("assinatura"),
+                                    call.argument("random")));
+                            break;
+                        case "ConsultarSat":
+                            _result.success(satLib.consultarSat(call.argument("random")));
+                            break;
+                        case "ConsultarStatusOperacional":
+                            String a = call.argument("codigoAtivar");
+                            int b = call.argument("random");
+                            _result.success(satLib.consultarStatusOperacional(call.argument("random"),
+                                    call.argument("codigoAtivar")));
+                            break;
+                        case "EnviarTesteFim":
+                            _result.success(satLib.enviarTesteFim(call.argument("codigoAtivar"),
+                                    call.argument("xmlVenda"), call.argument("random")));
+                            break;
+                        case "EnviarTesteVendas":
+                            _result.success(satLib.enviarTesteVendas(call.argument("codigoAtivar"),
+                                    call.argument("xmlVenda"), call.argument("random")));
+                            break;
+                        case "CancelarUltimaVenda":
+                            _result.success(satLib.cancelarUltimaVenda(call.argument("codigoAtivar"),
+                                    call.argument("xmlCancelamento"), call.argument("chaveCancelamento"),
+                                    call.argument("random")));
+                            break;
+                        case "ConsultarNumeroSessao":
+                            _result.success(satLib.consultarNumeroSessao(call.argument("codigoAtivar"),
+                                    call.argument("chaveSessao"), call.argument("random")));
+                            break;
+                        case "EnviarConfRede":
+                            try {
+                                _result.success(satLib.enviarConfRede(call.argument("random"),
+                                        call.argument("dadosXml"), call.argument("codigoAtivar")));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        case "TrocarCodAtivacao":
+                            _result.success(satLib.trocarCodAtivacao(call.argument("codigoAtivar"), call.argument("op"),
+                                    call.argument("codigoAtivacaoNovo"), call.argument("random")));
+                            break;
+                        case "BloquearSat":
+                            _result.success(satLib.bloquearSat(call.argument("codigoAtivar"), call.argument("random")));
+                            break;
+                        case "DesbloquearSat":
+                            _result.success(
+                                    satLib.desbloquearSat(call.argument("codigoAtivar"), call.argument("random")));
+                            break;
+                        case "ExtrairLog":
+                            _result.success(satLib.extrairLog(call.argument("codigoAtivar"), call.argument("random")));
+                            break;
+                        case "AtualizarSoftware":
+                            _result.success(
+                                    satLib.atualizarSoftware(call.argument("codigoAtivar"), call.argument("random")));
+                            break;
+                        case "Versao":
+                            _result.success(satLib.versao());
+                            break;
+                        // Inicia o intent que vai fazer a leitura do codigo de barras v2
+                        // Ler qualquer tipo de codigo de barra
                         case "leitorCodigoV2":
                             intent = new Intent(this, CodigoBarrasV2.class);
                             startActivity(intent);
+                            break;
+                        // Esta função vai chamar as classes para realizar as impressões de acordo com
+                        // as configurações recebidas do flutter
+                        case "fimimpressao":
+                            try {
+                                gertecPrinter.ImpressoraOutput();
+                                result.success("Finalizou impressao");
+                            } catch (GediException e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "imprimir":
                             configPrint = new ConfigPrint();
@@ -141,16 +234,15 @@ public class MainActivity extends FlutterActivity {
                                             String barCode = call.argument("barCode");
                                             configPrint.setAlinhamento("CENTER");
                                             gertecPrinter.setConfigImpressao(configPrint);
-                                            gertecPrinter.imprimeBarCodeIMG(mensagem,height,width,barCode);
+                                            gertecPrinter.imprimeBarCodeIMG(mensagem, height, width, barCode);
                                             break;
                                         case "TodasFuncoes":
                                             ImprimeTodasAsFucoes();
                                             break;
                                     }
-                                    gertecPrinter.avancaLinha(200);
-                                    gertecPrinter.ImpressoraOutput();
+                                    gertecPrinter.avancaLinha(40);
                                 }
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             break;
@@ -158,10 +250,10 @@ public class MainActivity extends FlutterActivity {
                 });
     }
 
-    private void startCamera(){
+    private void startCamera() {
         this.arrayListTipo.add(tipo);
         qrScan = new IntentIntegrator(this);
-        qrScan.setPrompt("Digitalizar o código " + tipo );
+        qrScan.setPrompt("Digitalizar o código " + tipo);
         qrScan.setBeepEnabled(true);
         qrScan.setBarcodeImageEnabled(true);
         qrScan.setTimeout(30000); // 30 * 1000 => 3 minuto
@@ -307,7 +399,7 @@ public class MainActivity extends FlutterActivity {
             gertecPrinter.imprimeTexto("===[Codigo QrCode Gertec IMG]==");
             gertecPrinter.imprimeBarCodeIMG("Gertec Developer Partner IMG", 240,240,"QR_CODE");
 
-            gertecPrinter.avancaLinha(100);
+            gertecPrinter.avancaLinha(40);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -320,38 +412,32 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 109) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Pega os resultados obtidos dos intent e envia para o flutter
+        // ("_result.success")
+        if (requestCode == 111) {
             if (resultCode == RESULT_OK && data != null) {
-                _result.success(data.getStringExtra("codigoNFCID"));
-            } else {
-                _result.notImplemented();
-            }
-        } else if (requestCode == 108) {
-            if (resultCode == RESULT_OK && data != null) {
-                _result.success(data.getStringExtra("codigoNFCGEDI"));
+                _result.success(data.getStringExtra("mensagemLeitura"));
             } else {
                 _result.notImplemented();
             }
         } else {
             IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (intentResult != null) {
-                //if qrcode has nothing in it
+                // if qrcode has nothing in it
                 if (intentResult.getContents() == null) {
-                    // Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
-                    resultado_Leitor = (this.tipo +": Não foi possível ler o código.\n");
+                    resultado_Leitor = (this.tipo + ": Não foi possível ler o código.\n");
                 } else {
-                    //if qr contains data
+                    // if qr contains data
                     try {
-                        resultado_Leitor =  this.tipo + ": " + intentResult.getContents() + "\n";
+                        resultado_Leitor = this.tipo + ": " + intentResult.getContents() + "\n";
                     } catch (Exception e) {
                         e.printStackTrace();
-                        resultado_Leitor = this.tipo +": Erro " + e.getMessage() + "\n";
+                        resultado_Leitor = this.tipo + ": Erro " + e.getMessage() + "\n";
                     }
                 }
             } else {
-                super.onActivityResult(requestCode, resultCode, data);
-                resultado_Leitor = this.tipo +": Não foi possível fazer a leitura.\n";
+                resultado_Leitor = this.tipo + ": Não foi possível fazer a leitura.\n";
             }
             _result.success(resultado_Leitor);
             this.arrayListTipo.clear();

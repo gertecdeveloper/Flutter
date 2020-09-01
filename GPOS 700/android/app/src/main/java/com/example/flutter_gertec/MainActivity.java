@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 
+import java.io.IOException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,7 @@ public class MainActivity extends FlutterActivity {
     private ArrayList<String> arrayListTipo;
     private static final String CHANNEL = "samples.flutter.dev/gedi"; // Canal de comunicação do flutter com o Java
     private ConfigPrint configPrint = new ConfigPrint();
+    private SatLib satLib;
     Intent intentGer7 = new Intent(Intent.ACTION_VIEW, Uri.parse("pos7api://pos7")); // Instanciando o Intent da Ger7 --
     // É importante que o apk da Ger7
     // esteje instalado na POS
@@ -60,6 +62,8 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        satLib = new SatLib(this); // Instancia uma variavel da classe SatLib, que possui todas as funções para
+        // envio de ações para o Sat.
         gertecPrinter = new GertecPrinter(this);
     }
 
@@ -115,6 +119,76 @@ public class MainActivity extends FlutterActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            break;
+                        // Verifica qual ação do Sat foi solicitada e retorna o codigo de resposta da
+                        // Sefaz
+                        // "satLib" possui todas funções do Sat
+                        case "AtivarSAT":
+                            _result.success(satLib.ativarSat(call.argument("codigoAtivar"),
+                                    call.argument("cnpj"), call.argument("random")));
+                            break;
+                        case "AssociarSAT":
+                            _result.success(satLib.associarSat(call.argument("cnpj"), call.argument("cnpjSoft"),
+                                    call.argument("codigoAtivar"), call.argument("assinatura"),
+                                    call.argument("random")));
+                            break;
+                        case "ConsultarSat":
+                            _result.success(satLib.consultarSat(call.argument("random")));
+                            break;
+                        case "ConsultarStatusOperacional":
+                            String a = call.argument("codigoAtivar");
+                            int b = call.argument("random");
+                            _result.success(satLib.consultarStatusOperacional(call.argument("random"),
+                                    call.argument("codigoAtivar")));
+                            break;
+                        case "EnviarTesteFim":
+                            _result.success(satLib.enviarTesteFim(call.argument("codigoAtivar"),
+                                    call.argument("xmlVenda"), call.argument("random")));
+                            break;
+                        case "EnviarTesteVendas":
+                            _result.success(satLib.enviarTesteVendas(call.argument("codigoAtivar"),
+                                    call.argument("xmlVenda"), call.argument("random")));
+                            break;
+                        case "CancelarUltimaVenda":
+                            _result.success(satLib.cancelarUltimaVenda(call.argument("codigoAtivar"),
+                                    call.argument("xmlCancelamento"), call.argument("chaveCancelamento"),
+                                    call.argument("random")));
+                            break;
+                        case "ConsultarNumeroSessao":
+                            _result.success(satLib.consultarNumeroSessao(call.argument("codigoAtivar"),
+                                    call.argument("chaveSessao"), call.argument("random")));
+                            break;
+                        case "EnviarConfRede":
+                            try {
+                                _result.success(satLib.enviarConfRede(call.argument("random"),
+                                        call.argument("dadosXml"), call.argument("codigoAtivar")));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        case "TrocarCodAtivacao":
+                            _result.success(
+                                    satLib.trocarCodAtivacao(call.argument("codigoAtivar"), call.argument("op"),
+                                            call.argument("codigoAtivacaoNovo"), call.argument("random")));
+                            break;
+                        case "BloquearSat":
+                            _result.success(
+                                    satLib.bloquearSat(call.argument("codigoAtivar"), call.argument("random")));
+                            break;
+                        case "DesbloquearSat":
+                            _result.success(satLib.desbloquearSat(call.argument("codigoAtivar"),
+                                    call.argument("random")));
+                            break;
+                        case "ExtrairLog":
+                            _result.success(
+                                    satLib.extrairLog(call.argument("codigoAtivar"), call.argument("random")));
+                            break;
+                        case "AtualizarSoftware":
+                            _result.success(satLib.atualizarSoftware(call.argument("codigoAtivar"),
+                                    call.argument("random")));
+                            break;
+                        case "Versao":
+                            _result.success(satLib.versao());
                             break;
                         // Inicia o intent que vai fazer a leitura do codigo de barras v2
                         // Ler qualquer tipo de codigo de barra

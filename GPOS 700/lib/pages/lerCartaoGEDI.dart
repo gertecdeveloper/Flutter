@@ -52,8 +52,7 @@ class _LeituraCartaoGEDI extends State<LeituraCartaoGEDI> {
                     _lerCartaoGEDI();
                   },
                 )),
-            Container(
-                padding: EdgeInsets.only(top: 20), child: Text("ID Cartões")),
+            Container(padding: EdgeInsets.only(top: 20), child: Text("ID Cartões")),
             Expanded(
               child: new ListView.builder(
                 shrinkWrap: true,
@@ -66,10 +65,7 @@ class _LeituraCartaoGEDI extends State<LeituraCartaoGEDI> {
                       dense: true,
                       title: Text(
                         resultadosNFCGEDI[index],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.0,
-                            color: Colors.black54),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0, color: Colors.black54),
                       ),
                     ),
                   );

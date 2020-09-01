@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.flutter_gertec">
+
+    <uses-feature android:name="android.hardware.usb.host" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_OWNER_DATA"/>
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA"/>
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.NFC" />
@@ -9,11 +15,11 @@
     <uses-feature
         android:name="android.hardware.camera.any"
         android:required="true" />
-
     <application
+        tools:replace="android:icon , android:label"
         android:name="io.flutter.app.FlutterApplication"
-        android:icon="@mipmap/ic_launcher"
-        android:label="flutter_gertec">
+        android:icon="@mipmap/gertec_one"
+        android:label="GertecOne Flutter">
         <activity
             android:name=".CodigoBarrasV2"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -32,9 +38,10 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" android:resource="@xml/device_filter"/>
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
@@ -46,10 +53,10 @@
                 <data android:scheme="*" />
             </intent-filter>
         </activity>
-        <activity android:name=".NfcLeitura" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".NfcLerGravar" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".NfcGravacao" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".NfcFormatar" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".NfcLeitura" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".NfcLerGravar" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".NfcGravacao" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".NfcFormatar" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <meta-data
             android:name="android.nfc.action.TECH_DISCOVERED"

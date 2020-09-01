@@ -37,6 +37,7 @@ public class NfcLeitura extends AppCompatActivity {
         // nfcManager = new NfcManager(this);
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -57,6 +58,14 @@ public class NfcLeitura extends AppCompatActivity {
         super.onPause();
         if(mNfcAdapter!= null)
             mNfcAdapter.disableForegroundDispatch(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent();
+        intent.putExtra("mensagemLeitura", mTvMessage.toString());
+        setResult(RESULT_OK, intent);
     }
 
     @Override

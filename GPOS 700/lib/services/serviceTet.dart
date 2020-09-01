@@ -20,12 +20,7 @@ Map<String, dynamic> _formatarInfoRecebida(myjson) {
 }
 
 class TefService {
-  TefService(
-      {String valor,
-      String tipoPagamento,
-      int quantParcelas,
-      bool habilitarImpressao,
-      String ip}) {
+  TefService({String valor, String tipoPagamento, int quantParcelas, bool habilitarImpressao, String ip}) {
     this._ipConfig = ip;
     this._valorVenda = valor;
     this._tipoPagamento = tipoPagamento;
@@ -198,11 +193,13 @@ class TefService {
     }
     mapMsiTef["isDoubleValidation"] = "0";
     mapMsiTef["caminhoCertificadoCA"] = "ca_cert_perm";
-    if (this.getImpressaoHabilitada) {
-      mapMsiTef["comprovante"] = "1";
-    } else {
-      mapMsiTef["comprovante"] = "0";
-    }
+    // ** Removida esta opção v3.70 Sitef **
+
+    // if (this.getImpressaoHabilitada) {
+    //   mapMsiTef["comprovante"] = "1";
+    // } else {
+    //   mapMsiTef["comprovante"] = "0";
+    // }
     return mapMsiTef;
   }
 
@@ -225,11 +222,13 @@ class TefService {
     mapMsiTef["restricoes"] = null;
     mapMsiTef["transacoesHabilitadas"] = null;
     mapMsiTef["caminhoCertificadoCA"] = "ca_cert_perm";
-    if (this.getImpressaoHabilitada) {
-      mapMsiTef["comprovante"] = "1";
-    } else {
-      mapMsiTef["comprovante"] = "0";
-    }
+    // ** Removida esta opção v3.70 Sitef **
+
+    // if (this.getImpressaoHabilitada) {
+    //   mapMsiTef["comprovante"] = "1";
+    // } else {
+    //   mapMsiTef["comprovante"] = "0";
+    // }
     return mapMsiTef;
   }
 
@@ -253,11 +252,13 @@ class TefService {
     mapMsiTef["transacoesHabilitadas"] = null;
     mapMsiTef["caminhoCertificadoCA"] = "ca_cert_perm";
     mapMsiTef["restricoes"] = "transacoesHabilitadas=16;26;27";
-    if (this.getImpressaoHabilitada) {
-      mapMsiTef["comprovante"] = "1";
-    } else {
-      mapMsiTef["comprovante"] = "0";
-    }
+    // ** Removida esta opção v3.70 Sitef **
+
+    // if (this.getImpressaoHabilitada) {
+    //   mapMsiTef["comprovante"] = "1";
+    // } else {
+    //   mapMsiTef["comprovante"] = "0";
+    // }
     return mapMsiTef;
   }
 
@@ -278,19 +279,20 @@ class TefService {
     mapMsiTef["modalidade"] = "114";
     mapMsiTef["isDoubleValidation"] = "0";
     mapMsiTef["caminhoCertificadoCA"] = "ca_cert_perm";
-    if (this.getImpressaoHabilitada) {
-      mapMsiTef["comprovante"] = "1";
-    } else {
-      mapMsiTef["comprovante"] = "0";
-    }
+    // ** Removida esta opção v3.70 **
+
+    // if (this.getImpressaoHabilitada) {
+    //   mapMsiTef["comprovante"] = "1";
+    // } else {
+    //   mapMsiTef["comprovante"] = "0";
+    // }
     return mapMsiTef;
   }
 
   // Realiza as funções da Tef, tem como retorno um objeto dynamic que pode ser atributi a [RetornoMsiTef] ou [RetornoGer7]
   // Recebe como parâmetros uma String que está relacionada a ação que deseja ser invocada e uma String relacionado a tef utilizada (ger7,msitef)
   // As ações possiveis são: venda, cancelamento, reimpressao, funcoes (Os valores devem ser escritos exatamente como o demonstrado)
-  Future<dynamic> enviarParametrosTef(
-      {@required String tipoAcao, @required String tipoTef}) async {
+  Future<dynamic> enviarParametrosTef({@required String tipoAcao, @required String tipoTef}) async {
     var retornoTef;
     var myjson;
     var parametroFormatado;

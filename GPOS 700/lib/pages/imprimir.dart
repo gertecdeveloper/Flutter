@@ -72,12 +72,7 @@ class _Imprimir extends State<Imprimir> {
     await platform.invokeMethod('fimimpressao');
   }
 
-  void impressaoDeTexto(
-      {String texto,
-      int fontSize,
-      String alinhar,
-      String fontFamily,
-      List<bool> selectedOptions}) async {
+  void impressaoDeTexto({String texto, int fontSize, String alinhar, String fontFamily, List<bool> selectedOptions}) async {
     texto = texto ?? ""; // Caso seja null
     if (texto.isEmpty) {
       erroImpresao();
@@ -102,9 +97,12 @@ class _Imprimir extends State<Imprimir> {
 
   Future<void> _impressaoTodasFuncoes() async {
     try {
-      await platform.invokeMethod('imprimir', <String, dynamic>{
-        "tipoImpressao": "TodasFuncoes",
-      });
+      await platform.invokeMethod(
+        'imprimir',
+        <String, dynamic>{
+          "tipoImpressao": "TodasFuncoes",
+        },
+      );
     } on PlatformException catch (e) {
       print(e.message);
     }
@@ -120,8 +118,7 @@ class _Imprimir extends State<Imprimir> {
     }
   }
 
-  Future<void> _impressaoDeCodigoDeBarra(
-      {String texto, int height, int width, String barCode}) async {
+  Future<void> _impressaoDeCodigoDeBarra({String texto, int height, int width, String barCode}) async {
     texto = texto ?? ""; // Caso seja null
     if (texto.isNotEmpty) {
       try {
@@ -177,9 +174,7 @@ class _Imprimir extends State<Imprimir> {
                   fit: BoxFit.fitWidth,
                   child: Text(
                     "Funções Impressão G700/G800",
-                    style: TextStyle(
-                        fontSize: ScreenUtil.instance.setSp(25),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(25), fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -216,35 +211,24 @@ class _Imprimir extends State<Imprimir> {
                   fit: BoxFit.fitWidth,
                   child: Text(
                     "Configuração de Impressão",
-                    style: TextStyle(
-                        fontSize: ScreenUtil.instance.setSp(25),
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(25), fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Radio(
-                      value: 'LEFT',
-                      groupValue: valorSelecionado,
-                      onChanged: radioButtonChanges),
+                  Radio(value: 'LEFT', groupValue: valorSelecionado, onChanged: radioButtonChanges),
                   AutoSizeText(
                     'Esquerda',
                     style: TextStyle(fontSize: 15),
                   ),
-                  Radio(
-                      value: 'CENTER',
-                      groupValue: valorSelecionado,
-                      onChanged: radioButtonChanges),
+                  Radio(value: 'CENTER', groupValue: valorSelecionado, onChanged: radioButtonChanges),
                   AutoSizeText(
                     'Centralizado',
                     style: TextStyle(fontSize: 15),
                   ),
-                  Radio(
-                      value: 'RIGHT',
-                      groupValue: valorSelecionado,
-                      onChanged: radioButtonChanges),
+                  Radio(value: 'RIGHT', groupValue: valorSelecionado, onChanged: radioButtonChanges),
                   AutoSizeText(
                     'Direita',
                     style: TextStyle(fontSize: 15),
@@ -265,8 +249,7 @@ class _Imprimir extends State<Imprimir> {
                       },
                       child: Text(
                         "NEGRITO",
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
                       ),
                     ),
                   ),
@@ -282,8 +265,7 @@ class _Imprimir extends State<Imprimir> {
                       disabledTextColor: Colors.black87,
                       child: Text(
                         "ITÁLICO",
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
                       ),
                     ),
                   ),
@@ -299,8 +281,7 @@ class _Imprimir extends State<Imprimir> {
                       disabledTextColor: Colors.black87,
                       child: Text(
                         "SUBLINHADO",
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
                       ),
                     ),
                   )
@@ -318,10 +299,7 @@ class _Imprimir extends State<Imprimir> {
                     icon: Icon(Icons.arrow_downward),
                     iconSize: 24,
                     elevation: 16,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
                     onChanged: (String newValue) {
                       setState(() {
                         dropdownFont = newValue;
@@ -349,17 +327,13 @@ class _Imprimir extends State<Imprimir> {
                     icon: Icon(Icons.arrow_downward),
                     iconSize: 24,
                     elevation: 16,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
                     onChanged: (int newValue) {
                       setState(() {
                         dropdownValueSize = newValue;
                       });
                     },
-                    items: <int>[20, 30, 40, 50, 70, 80, 90, 100]
-                        .map<DropdownMenuItem<int>>((int value) {
+                    items: <int>[20, 30, 40, 50, 70, 80, 90, 100].map<DropdownMenuItem<int>>((int value) {
                       return DropdownMenuItem<int>(
                         value: value,
                         child: Text(value.toString()),
@@ -417,17 +391,13 @@ class _Imprimir extends State<Imprimir> {
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
                         elevation: 16,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
                         onChanged: (int newValue) {
                           setState(() {
                             dropdownBarHeight = newValue;
                           });
                         },
-                        items: <int>[10, 40, 80, 120, 160, 200, 280, 320]
-                            .map<DropdownMenuItem<int>>((int value) {
+                        items: <int>[10, 40, 80, 120, 160, 200, 280, 320].map<DropdownMenuItem<int>>((int value) {
                           return DropdownMenuItem<int>(
                             value: value,
                             child: Text(value.toString()),
@@ -444,17 +414,13 @@ class _Imprimir extends State<Imprimir> {
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
                         elevation: 16,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
                         onChanged: (int newValue) {
                           setState(() {
                             dropdownBarWidth = newValue;
                           });
                         },
-                        items: <int>[10, 40, 80, 120, 160, 200, 280, 320]
-                            .map<DropdownMenuItem<int>>((int value) {
+                        items: <int>[10, 40, 80, 120, 160, 200, 280, 320].map<DropdownMenuItem<int>>((int value) {
                           return DropdownMenuItem<int>(
                             value: value,
                             child: Text(value.toString()),
@@ -471,10 +437,7 @@ class _Imprimir extends State<Imprimir> {
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
                         elevation: 16,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
                         onChanged: (String newValue) {
                           setState(() {
                             dropdownBarType = newValue;

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gertec/CodigoDeBarraV1.dart';
-import 'package:flutter_gertec/imprimir.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'lerCartaoNfc.dart';
+
+import 'menus/sat.dart';
+import 'pages/CodigoDeBarraV1.dart';
+import 'pages/imprimir.dart';
+import 'pages/lerCartaoNfc.dart';
 
 void main() => runApp(MyApp());
 
@@ -41,11 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   var newTaskCtrl = TextEditingController();
-  var Lista_nome_funcoes = [
+  var listaNomeFuncoes = [
     {"name": "Código de Barras", "img": "assets/barcode.png"},
     {"name": "Código de Barras V2", "img": "assets/qr_code.png"},
     {"name": "Impressão", "img": "assets/print.png"},
     {"name": "NFC Leitura/Gravação", "img": "assets/nfc2.png"},
+    {"name": "SAT", "img": "assets/iconSat.png"},
   ];
   void trocarTela(int id) {
     switch (id) {
@@ -71,6 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
           MaterialPageRoute(builder: (context) => PageLeituraCartao()),
         );
         break;
+      case 4:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PageSat()),
+        );
+        break;
     }
   }
 
@@ -94,11 +103,8 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 new Image.asset('assets/gertec.png'),
                 Text(
-                  "Flutter Project",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: ScreenUtil.instance.setSp(30.0),
-                      color: Colors.black87),
+                  "Flutter Project v1.0.0",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(30.0), color: Colors.black87),
                 ),
               ],
             ),
@@ -106,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: new ListView.builder(
               shrinkWrap: true,
-              itemCount: Lista_nome_funcoes.length,
+              itemCount: listaNomeFuncoes.length,
               itemExtent: 80,
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
@@ -117,18 +123,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: ListTile(
                     dense: true,
                     leading: Image(
-                      image: AssetImage(Lista_nome_funcoes[index]["img"]),
+                      image: AssetImage(listaNomeFuncoes[index]["img"]),
                     ),
                     onTap: () {
                       trocarTela(index);
                     },
                     title: Center(
                       child: Text(
-                        Lista_nome_funcoes[index]["name"],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(20.0),
-                            color: Colors.black54),
+                        listaNomeFuncoes[index]["name"],
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20.0), color: Colors.black54),
                       ),
                     ),
                   ),

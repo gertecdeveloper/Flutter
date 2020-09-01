@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CFeCanc>
+	<infCFe chCanc="trocarCfe">
+		<ide>
+			<CNPJ>16716114000172</CNPJ>
+			<signAC>SGR-SAT SISTEMA DE GESTAO E RETAGUARDA DO SAT</signAC>
+			<numeroCaixa>001</numeroCaixa>
+		</ide>
+		<emit/>
+		<dest/>
+		<total />
+	</infCFe>
+</CFeCanc>

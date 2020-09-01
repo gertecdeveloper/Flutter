@@ -69,8 +69,8 @@ flutter {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation(name:'libgedi-0.190121.gpos800', ext:'aar')
     implementation(name: 'payment-1.14.10.181016', ext: 'aar')
+    implementation(name: 'SatGerLib', ext: 'aar')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'

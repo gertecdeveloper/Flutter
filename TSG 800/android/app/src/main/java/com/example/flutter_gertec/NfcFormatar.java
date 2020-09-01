@@ -1,4 +1,5 @@
 package com.example.flutter_gertec;
+
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,11 +34,10 @@ public class NfcFormatar extends AppCompatActivity {
         initNFC();
     }
 
-    private void initNFC(){
+    private void initNFC() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         // nfcManager = new NfcManager(this);
     }
-
 
     @Override
     protected void onResume() {
@@ -46,18 +46,18 @@ public class NfcFormatar extends AppCompatActivity {
         IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         IntentFilter techDetected = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
         IntentFilter idDetected = new IntentFilter((NfcAdapter.EXTRA_ID));
-        IntentFilter[] nfcIntentFilter = new IntentFilter[]{techDetected,tagDetected,ndefDetected, idDetected};
+        IntentFilter[] nfcIntentFilter = new IntentFilter[] { techDetected, tagDetected, ndefDetected, idDetected };
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        if(mNfcAdapter!= null)
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        if (mNfcAdapter != null)
             mNfcAdapter.enableForegroundDispatch(this, pendingIntent, nfcIntentFilter, null);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(mNfcAdapter!= null)
+        if (mNfcAdapter != null)
             mNfcAdapter.disableForegroundDispatch(this);
     }
 
@@ -72,14 +72,15 @@ public class NfcFormatar extends AppCompatActivity {
 
             Ndef ndef = Ndef.get(tag);
 
-            if(ndef == null){
+            if (ndef == null) {
                 Toast.makeText(getApplicationContext(), "Tipo de cartão não suportado.", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 nfcLeituraGravacao = new NfcLeituraGravacao(ndef.getTag());
                 formatFromNFC(ndef);
             }
         }
     }
+
     private void formatFromNFC(Ndef ndef) {
 
         boolean retorno;
@@ -88,9 +89,9 @@ public class NfcFormatar extends AppCompatActivity {
 
             retorno = nfcLeituraGravacao.formataCartao(ndef);
 
-            if (retorno){
+            if (retorno) {
                 texMensagem.setText("Cartão formatado");
-            }else{
+            } else {
                 texMensagem.setText("Não é necessário formatar este cartão.");
             }
 

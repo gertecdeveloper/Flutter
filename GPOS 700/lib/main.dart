@@ -5,6 +5,7 @@ import 'package:flutter_gertec/pages/imprimir.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'pages/lerCartaoGEDI.dart';
 import 'pages/lerCartaoID.dart';
+import 'pages/menus/sat.dart';
 import 'pages/menus/tefs.dart';
 
 void main() => runApp(MyApp());
@@ -50,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
     {"name": "NFC GEDI", "img": "assets/nfc.png"},
     {"name": "NFC Id", "img": "assets/nfc1.png"},
     {"name": "TEF", "img": "assets/pos-terminal.png"},
+    {"name": "SAT", "img": "assets/iconSat.png"},
   ];
   void trocarTela(int id) {
     switch (id) {
@@ -87,6 +89,12 @@ class _MyHomePageState extends State<MyHomePage> {
           MaterialPageRoute(builder: (context) => PageTef()),
         );
         break;
+      case 6:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PageSat()),
+        );
+        break;
     }
   }
 
@@ -110,11 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 new Image.asset('assets/gertec.png'),
                 Text(
-                  "Flutter Project",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: ScreenUtil.instance.setSp(30.0),
-                      color: Colors.black87),
+                  "Flutter Project v1.0.0",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(30.0), color: Colors.black87),
                 ),
               ],
             ),
@@ -141,10 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     title: Center(
                       child: Text(
                         listaNomeFuncoes[index]["name"],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(20.0),
-                            color: Colors.black54),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20.0), color: Colors.black54),
                       ),
                     ),
                   ),

@@ -29,8 +29,7 @@ class _CodigoDeBarrav1 extends State<CodigoDeBarrav1> {
 
   Future<void> _leitorCodigoDeBarra(String tipoLeitura) async {
     try {
-      String teste = await platform.invokeMethod(
-          'leitorCodigov1', <String, dynamic>{"tipoLeitura": tipoLeitura});
+      String teste = await platform.invokeMethod('leitorCodigov1', <String, dynamic>{"tipoLeitura": tipoLeitura});
       setState(() {
         resultadosBardCod.add(teste);
       });
@@ -57,10 +56,7 @@ class _CodigoDeBarrav1 extends State<CodigoDeBarrav1> {
           children: <Widget>[
             Text(
               "Ler Código de Barras",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30),
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -70,9 +66,7 @@ class _CodigoDeBarrav1 extends State<CodigoDeBarrav1> {
                   child: RaisedButton(
                     child: Text(
                       'EAN 8',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(15),
-                          color: Colors.red),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.red),
                     ),
                     onPressed: () {
                       _leitorCodigoDeBarra("EAN_8");
@@ -84,9 +78,7 @@ class _CodigoDeBarrav1 extends State<CodigoDeBarrav1> {
                   child: RaisedButton(
                     child: Text(
                       'EAN 13',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(15),
-                          color: Colors.red),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.red),
                     ),
                     onPressed: () {
                       _leitorCodigoDeBarra("EAN_13");
@@ -98,9 +90,7 @@ class _CodigoDeBarrav1 extends State<CodigoDeBarrav1> {
                   child: RaisedButton(
                     child: Text(
                       'EAN 14',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(15),
-                          color: Colors.red),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.red),
                     ),
                     onPressed: () {
                       _leitorCodigoDeBarra("EAN_14");
@@ -112,9 +102,7 @@ class _CodigoDeBarrav1 extends State<CodigoDeBarrav1> {
                   child: RaisedButton(
                     child: Text(
                       'QR CODE',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(15),
-                          color: Colors.red),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.red),
                     ),
                     onPressed: () {
                       _leitorCodigoDeBarra("QR_CODE");
@@ -135,10 +123,7 @@ class _CodigoDeBarrav1 extends State<CodigoDeBarrav1> {
                       dense: true,
                       title: Text(
                         resultadosBardCod[index],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(12.0),
-                            color: Colors.black54),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.0), color: Colors.black54),
                       ),
                     ),
                   );
