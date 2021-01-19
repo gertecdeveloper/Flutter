@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">GertecOne </string>
+
+    <string name="aproxime_o_cart_o_da_leitora">Aproxime o cartão da leitora.</string>
+
+    <string name="message_write_error">Erro ao gravar informação!</string>
+    <string name="message_write_success">Sucesso ao gravar informação!</string>
+    <string name="message_write_progress">Gravando informação..</string>
+    <string name="message_tag_detected">Cartão lido com sucesso!</string>
+    <string name="message_read_tag">Leitura do Cartão NFC</string>
+    <string name="message_read">Aproxime o cartão</string>
+    <string name="message_write_tag">Gravar Cartão</string>
+    <string name="message_write_read_tag">Gravar/Ler Cartão</string>
+    <string name="message_tap_tag">Toque na tag NFC no seu dispositivo!</string>
+    <string name="message_format_tag">Formatar Cartão</string>
+    <string name="gravar_no_cart_o">Gravar no Cartão</string>
+    <string name="ler_cart_o">Ler Cartão</string>
+    <string name="formatar_cart_o">Formatar Cartão</string>
+    <string name="teste_leitura_grava_o">Teste Leitura/Gravação</string>
+
+    <string name="bar_code_width">Bar Code Width</string>
+    <string name="bar_code_height">Bar Code Height</string>
+    <string name="fun_es_impressora_gpos800">Funções Impressao G700/G800</string>
+    <string name="status_impressora">Status Impressora</string>
+    <string name="escreva_a_sua_mensagem">Escreva a sua mensagem</string>
+    <string name="configura_o_de_impress_o">Configuração de impressão</string>
+    <string name="esquerda">Esquerda</string>
+    <string name="centralizado">Centralizado</string>
+    <string name="direita">Direita</string>
+    <string name="negrito">Negrito</string>
+    <string name="it_lico">Itálico</string>
+    <string name="sublinhado">Sublinhado</string>
+    <string name="size">Size:</string>
+    <string name="imprimir">Imprimir</string>
+    <string name="imprimir_imagem">Imprimir imagem</string>
+    <string name="barcodes">BarCodes</string>
+    <string name="imprimir_barcode">Imprimir BarCode</string>
+    <string name="imprimir_todasasfuncoes">Imprimir Todas Funções</string>
+    <string name="font">Font:</string>
+
+    <string-array name="Tamanhos">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="Widths">
+        <item>10</item>
+        <item>40</item>
+        <item>80</item>
+        <item>120</item>
+        <item>160</item>
+        <item>200</item>
+        <item>240</item>
+        <item>280</item>
+        <item>320</item>
+        <item>380</item>
+    </string-array>
+
+
+    <string-array name="Fonts">
+        <item>DEFAULT</item>
+        <item>MONOSPACE</item>
+        <item>SANS SERIF</item>
+        <item>SERIF</item>
+    </string-array>
+
+    <string-array name="BarCodes">
+        <item>CODE_128</item>
+        <item>EAN_8</item>
+        <item>EAN_13</item>
+        <item>PDF_417</item>
+        <item>QR_CODE</item>
+    </string-array>
+
+</resources>
