@@ -50,38 +50,43 @@ class _PageTefState extends State<PageTef> {
   dialogo(String msg, String titulo) {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text(titulo),
-        content: Container(
-          height: 100,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(msg),
-            ],
+      builder: (context) {
+        return AlertDialog(
+          title: Text(titulo),
+          content: Container(
+            height: 100,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(msg),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Ok"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
-  final precoVenda = MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.', initialValue: 10);
+  final precoVenda = MoneyMaskedTextController(
+      decimalSeparator: ',', thousandSeparator: '.', initialValue: 10);
 
   final ipServidor = TextEditingController(); //Text edit ip do servidor
 
-  final numParcelas = TextEditingController(text: "1"); //Text edit da quantidade de parcelas
+  final numParcelas =
+      TextEditingController(text: "1"); //Text edit da quantidade de parcelas
 
   bool habilitarImpressao = true; //armazena se a impressao vai ser realizada
 
-  String tipoPagamentoSelecionado = "Crédito"; //armazena o tipo de pagamento escolhido
+  String tipoPagamentoSelecionado =
+      "Crédito"; //armazena o tipo de pagamento escolhido
 
   String resultsMsitef = "";
 
@@ -106,7 +111,8 @@ class _PageTefState extends State<PageTef> {
     valorFormatado = valorFormatado.replaceAll(',', "");
     tefService.setValorVenda = valorFormatado;
     tefService.setTipoParcelamento = this.tipoParcelamento;
-    tefService.setIpConfig = ipServidor.text.toString(); // Somente é necessario settar o ip caso esteja utilizando o Tef M-sitef
+    tefService.setIpConfig = ipServidor.text
+        .toString(); // Somente é necessario settar o ip caso esteja utilizando o Tef M-sitef
 
     tefService.setHabilitarImpressao =
         habilitarImpressao; //* Caso seja M-sitef, este parâmetro é passado, mas não surge efeito (linhas comentadas no ServiceTef), pois na versão v3.70 está opção foi removida do Sitef **
@@ -114,7 +120,8 @@ class _PageTefState extends State<PageTef> {
     tefService.setQuantParcelas = int.parse(numParcelas.text);
     tefService.setTipoPagamento = tipoPagamentoSelecionado;
     if (precoVenda.numberValue <= 0) {
-      dialogo("O valor de venda digitado deve ser maior que 0", "Erro ao executar função");
+      dialogo("O valor de venda digitado deve ser maior que 0",
+          "Erro ao executar função");
     } else if (tef == "msitef" && validaIp(ipServidor.text) == false) {
       dialogo("Verifique o IP digitado", "Erro ao executar função");
     } else {
@@ -125,7 +132,8 @@ class _PageTefState extends State<PageTef> {
           // Verifica se tem algo pra imprimir
           // Verifica se ocorreu um erro durante venda ou cancelamento
           if (acao == "venda" || acao == "cancelamento") {
-            if (retornoMsiTef.getCodTrans.toString() == "" || retornoMsiTef.getCodTrans == null) {
+            if (retornoMsiTef.getCodTrans.toString() == "" ||
+                retornoMsiTef.getCodTrans == null) {
               //Caso ocorra um erro durante as ações, um dialogo de erro é chamado
               msgErroMsitef(retornoMsiTef);
             } else {
@@ -133,9 +141,11 @@ class _PageTefState extends State<PageTef> {
             }
           }
           if (acao == "funcoes" || acao == "reimpressao") {
-            if (retornoMsiTef.textoImpressoCliente.isNotEmpty || retornoMsiTef.textoImpressoEstabelecimento.isNotEmpty) {
+            if (retornoMsiTef.textoImpressoCliente.isNotEmpty ||
+                retornoMsiTef.textoImpressoEstabelecimento.isNotEmpty) {
               DateTime now = DateTime.now();
-              String formattedDate = DateFormat('EEE MMM d kk:mm:ss yyyy').format(now);
+              String formattedDate =
+                  DateFormat('EEE MMM d kk:mm:ss yyyy').format(now);
               setState(() {
                 resultsMsitef = formattedDate +
                     "\n" +
@@ -191,7 +201,9 @@ class _PageTefState extends State<PageTef> {
     String result = "";
     String formattedDate = DateFormat('EEE MMM d kk:mm:ss yyyy').format(now);
     result += formattedDate + "\n";
-    result += "Ocorreu um erro durante a realização da ação:\n" + "CODRESP: " + operacaoRetorno.getCodResp;
+    result += "Ocorreu um erro durante a realização da ação:\n" +
+        "CODRESP: " +
+        operacaoRetorno.getCodResp;
     result += "\n------------------------------\n";
     setState(() {
       resultsMsitef = result + resultsMsitef;
@@ -237,7 +249,10 @@ class _PageTefState extends State<PageTef> {
             children: [
               Text(
                 "Exemplo M-Sitef- Flutter",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.grey[600]),
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[600]),
               ),
               Row(
                 children: [
@@ -257,7 +272,9 @@ class _PageTefState extends State<PageTef> {
                                   padding: const EdgeInsets.only(left: 15),
                                   child: Text(
                                     "Valor em R\$",
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Padding(
@@ -279,15 +296,23 @@ class _PageTefState extends State<PageTef> {
                               children: <Widget>[
                                 RichText(
                                   text: TextSpan(
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                     children: <TextSpan>[
-                                      TextSpan(text: 'IP', style: TextStyle(fontSize: 18, color: Colors.black)),
+                                      TextSpan(
+                                          text: 'IP',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black)),
                                     ],
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
-                                  child: SizedBox(height: 30, width: 160, child: textFormFieldIp),
+                                  child: SizedBox(
+                                      height: 30,
+                                      width: 160,
+                                      child: textFormFieldIp),
                                 ),
                               ],
                             )
@@ -298,7 +323,8 @@ class _PageTefState extends State<PageTef> {
                           padding: const EdgeInsets.only(left: 15),
                           child: Text(
                             "Número de Parcelas",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
                         SizedBox(
@@ -311,8 +337,11 @@ class _PageTefState extends State<PageTef> {
                           iHeight: 40,
                           paddingTop: 10,
                           callback: () {
-                            if (tipoPagamentoSelecionado == "Crédito" && (numParcelas.text.isEmpty || int.parse(numParcelas.text) <= 0)) {
-                              dialogo("É necessário colocar o número de parcelas desejadas (obs.: Opção de compra por crédito marcada)",
+                            if (tipoPagamentoSelecionado == "Crédito" &&
+                                (numParcelas.text.isEmpty ||
+                                    int.parse(numParcelas.text) <= 0)) {
+                              dialogo(
+                                  "É necessário colocar o número de parcelas desejadas (obs.: Opção de compra por crédito marcada)",
                                   "Ocorreu um erro durante a execução");
                             } else {
                               realizarFuncao("venda", tefSelecionado);
@@ -323,19 +352,22 @@ class _PageTefState extends State<PageTef> {
                           "CANCELAR TRANSAÇÃO",
                           iHeight: 40,
                           paddingTop: 10,
-                          callback: () => realizarFuncao("cancelamento", tefSelecionado),
+                          callback: () =>
+                              realizarFuncao("cancelamento", tefSelecionado),
                         ),
                         WidgetsGertec.buttonStandard(
                           "FUNÇÕES",
                           iHeight: 40,
                           paddingTop: 10,
-                          callback: () => realizarFuncao("funcoes", tefSelecionado),
+                          callback: () =>
+                              realizarFuncao("funcoes", tefSelecionado),
                         ),
                         WidgetsGertec.buttonStandard(
                           "REIMPRESSÃO",
                           iHeight: 40,
                           paddingTop: 10,
-                          callback: () => realizarFuncao("reimpressao", tefSelecionado),
+                          callback: () =>
+                              realizarFuncao("reimpressao", tefSelecionado),
                         ),
                       ],
                     ),
@@ -353,7 +385,8 @@ class _PageTefState extends State<PageTef> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        WidgetsGertec.boxText(resultsMsitef, width: _width / 2 - 100, height: _height - 150)
+                        WidgetsGertec.boxText(resultsMsitef,
+                            width: _width / 2 - 100, height: _height - 150)
                       ],
                     ),
                   ),
@@ -379,7 +412,8 @@ class _PageTefState extends State<PageTef> {
   }
 
   Widget get textFormFieldNumParcelas {
-    if (tipoPagamentoSelecionado == "Debito" || tipoPagamentoSelecionado == "Todos") {
+    if (tipoPagamentoSelecionado == "Debito" ||
+        tipoPagamentoSelecionado == "Todos") {
       this.numParcelas.text = "1";
       return TextFormField(
         enabled: false,
@@ -420,7 +454,8 @@ class _PageTefState extends State<PageTef> {
             ),
             Row(
               children: <Widget>[
-                radioCheck("Crédito", tipoPagamentoSelecionado, radioButtonChangePagamento),
+                radioCheck("Crédito", tipoPagamentoSelecionado,
+                    radioButtonChangePagamento),
                 Text(
                   'Crédito',
                   style: TextStyle(fontSize: 15),
@@ -429,7 +464,8 @@ class _PageTefState extends State<PageTef> {
             ),
             Row(
               children: <Widget>[
-                radioCheck("Debito", tipoPagamentoSelecionado, radioButtonChangePagamento),
+                radioCheck("Debito", tipoPagamentoSelecionado,
+                    radioButtonChangePagamento),
                 Text(
                   'Débito',
                   style: TextStyle(fontSize: 15),
@@ -438,7 +474,8 @@ class _PageTefState extends State<PageTef> {
             ),
             Row(
               children: <Widget>[
-                radioCheck("Carteira Digital", tipoPagamentoSelecionado, radioButtonChangePagamento),
+                radioCheck("Carteira Digital", tipoPagamentoSelecionado,
+                    radioButtonChangePagamento),
                 Text(
                   'Carteira Digital',
                   style: TextStyle(fontSize: 15),
@@ -447,7 +484,8 @@ class _PageTefState extends State<PageTef> {
             ),
             Row(
               children: <Widget>[
-                radioCheck("Todos", tipoPagamentoSelecionado, radioButtonChangePagamento),
+                radioCheck("Todos", tipoPagamentoSelecionado,
+                    radioButtonChangePagamento),
                 Text(
                   'Todos',
                   style: TextStyle(fontSize: 15),
@@ -470,7 +508,8 @@ class _PageTefState extends State<PageTef> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                radioCheck("Loja", tipoParcelamento, radioButtonChangeParcelamento),
+                radioCheck(
+                    "Loja", tipoParcelamento, radioButtonChangeParcelamento),
                 Text(
                   "Parcelado Loja",
                   style: TextStyle(fontSize: 15),
@@ -480,7 +519,8 @@ class _PageTefState extends State<PageTef> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                radioCheck("Adm", tipoParcelamento, radioButtonChangeParcelamento),
+                radioCheck(
+                    "Adm", tipoParcelamento, radioButtonChangeParcelamento),
                 Text(
                   "Parcelado Adm",
                   style: TextStyle(fontSize: 15),
@@ -496,7 +536,11 @@ class _PageTefState extends State<PageTef> {
   Widget radioCheck(String text, String controll, Function onChange) {
     return SizedBox(
       height: 20,
-      child: Radio(value: text, materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, groupValue: controll, onChanged: onChange),
+      child: Radio(
+          value: text,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          groupValue: controll,
+          onChanged: onChange),
     );
   }
 

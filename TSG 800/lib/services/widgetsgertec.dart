@@ -18,32 +18,37 @@ class WidgetsGertec extends StatelessWidget {
   }
 
   // Dialogo que ira aparecer após a função Sat ser iniciada e ocorrer algum erro ou tudo ocorrer certo
-  static void dialogoSat(String messageText, {@required BuildContext context, double heightDialog = 100}) {
+  static void dialogoSat(String messageText,
+      {@required BuildContext context, double heightDialog = 100}) {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Retorno"),
-        content: Container(
-          height: heightDialog,
-          child: ListView(
-            children: <Widget>[
-              Text(messageText),
-            ],
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Retorno"),
+          content: Container(
+            height: heightDialog,
+            child: ListView(
+              children: <Widget>[
+                Text(messageText),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Ok"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
     );
   }
 
-  static Widget formField(TextEditingController textFormField, String textAntesForm, {TextInputType textInputType}) {
+  static Widget formField(
+      TextEditingController textFormField, String textAntesForm,
+      {TextInputType textInputType}) {
     return Padding(
       padding: const EdgeInsets.only(left: 10),
       child: Row(
