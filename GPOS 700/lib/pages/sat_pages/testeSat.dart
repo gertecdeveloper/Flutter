@@ -17,19 +17,26 @@ class PageTesteSat extends StatefulWidget {
 
 class _PageTesteSatState extends State<PageTesteSat> {
   // Inicializa o código de ativação com um valor global, para o usuario não precisar ficar digitando
-  final codigoAtivacao = TextEditingController(text: GlobalValues.codAtivarSat); // Codigo de ativação do Sat
-  final chaveCancelamento = TextEditingController(text: GlobalValues.valorCfe); // Chave de cancelamento
-  final chaveSessao = TextEditingController(text: "123"); // Chave de sessao para consulta
+  final codigoAtivacao = TextEditingController(
+      text: GlobalValues.codAtivarSat); // Codigo de ativação do Sat
+  final chaveCancelamento = TextEditingController(
+      text: GlobalValues.valorCfe); // Chave de cancelamento
+  final chaveSessao =
+      TextEditingController(text: "123"); // Chave de sessao para consulta
   String xmlVenda; // Xml de Venda a ser enviado, transformado em Base 64
-  String xmlCancelamento; // Xml de Cancelamento a ser enviado, transformado em Base 64
+  String
+      xmlCancelamento; // Xml de Cancelamento a ser enviado, transformado em Base 64
 
-  CommonGertec commonGertec = new CommonGertec(); //* Classe que possui partes de código comuns em diversas telas
+  CommonGertec commonGertec =
+      new CommonGertec(); //* Classe que possui partes de código comuns em diversas telas
 
   void initState() {
     super.initState();
     // Transforma os Xml em base 64 e envia para o Java Android transmitir para a Sefaz
-    transformarbase64('assets/xmlSat/arq_cancelamento.xml').then((value) => xmlCancelamento = value);
-    transformarbase64('assets/xmlSat/arq_venda_008_Simples_Nacional.xml').then((value) => xmlVenda = value);
+    transformarbase64('assets/xmlSat/arq_cancelamento.xml')
+        .then((value) => xmlCancelamento = value);
+    transformarbase64('assets/xmlSat/arq_venda_008_Simples_Nacional.xml')
+        .then((value) => xmlVenda = value);
   }
 
   //Reponsavel por fazer a conversão de um File Xml das pastas assets, para um codigo na base 64.
@@ -49,49 +56,53 @@ class _PageTesteSatState extends State<PageTesteSat> {
   ) {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Alerta"),
-        content: Container(
-          height: 120,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(texto),
-              SizedBox(
-                height: 50,
-                width: 140,
-                child: TextFormField(
-                  keyboardType: textInputType,
-                  controller: textEditingController,
-                  style: TextStyle(
-                    fontSize: 14,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Alerta"),
+          content: Container(
+            height: 120,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(texto),
+                SizedBox(
+                  height: 50,
+                  width: 140,
+                  child: TextFormField(
+                    keyboardType: textInputType,
+                    controller: textEditingController,
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Ok"),
-            onPressed: () {
-              if (textEditingController.text.length > 0) {
-                Navigator.pop(context);
-                function();
-              } else {
-                WidgetsGertec.dialogoSat("Verifique a entrada!");
-              }
-            },
-          )
-        ],
-      ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                if (textEditingController.text.length > 0) {
+                  Navigator.pop(context);
+                  function();
+                } else {
+                  WidgetsGertec.dialogoSat("Verifique a entrada!");
+                }
+              },
+            )
+          ],
+        );
+      },
     );
   }
 
   // Função para validar os valores digitos pelo usuario e realizar a ativação do SAT
   Future<void> testeSat(String funcao) async {
-    GlobalValues.codAtivarSat = codigoAtivacao.text; // Salva  o código de ativação para o usuario não precisar ficar digitando em todas as telas
-    if (funcao == "ConsultarSat" || commonGertec.isCodigoValido(codigoAtivacao.text)) {
+    GlobalValues.codAtivarSat = codigoAtivacao
+        .text; // Salva  o código de ativação para o usuario não precisar ficar digitando em todas as telas
+    if (funcao == "ConsultarSat" ||
+        commonGertec.isCodigoValido(codigoAtivacao.text)) {
       //* Chama a função Invocar Operação Sat, que recebe como parâmetro a "operação invocada" e um "Map com as chaves e seus respectivos valores".
       RetornoSat retornoSat = await OperacaoSat.invocarOperacaoSat(
         // Passa como parâmetro um Map de argumentos de valores que deseja enviar
@@ -122,10 +133,14 @@ class _PageTesteSatState extends State<PageTesteSat> {
       //* Está função [OperacaoSat.formataRetornoSat] recebe como parâmetro a operação realizada e um objeto do tipo RetornoSat
       //* Retorna uma String com os valores obtidos do retorno da Operação já formatados e prontos para serem exibidos na tela
       // Recomenda-se acessar a função e entender como ela funciona
-      String retornoFormatado = OperacaoSat.formataRetornoSat(retornoSat: retornoSat);
-      WidgetsGertec.dialogoSat(retornoFormatado, context: context, heightDialog: 300);
+      String retornoFormatado =
+          OperacaoSat.formataRetornoSat(retornoSat: retornoSat);
+      WidgetsGertec.dialogoSat(retornoFormatado,
+          context: context, heightDialog: 300);
     } else {
-      WidgetsGertec.dialogoSat("Código de Ativação deve ter entre 8 a 32 caracteres!", context: context);
+      WidgetsGertec.dialogoSat(
+          "Código de Ativação deve ter entre 8 a 32 caracteres!",
+          context: context);
     }
   }
 
@@ -171,10 +186,14 @@ class _PageTesteSatState extends State<PageTesteSat> {
                 ),
               ),
               SizedBox(height: 20),
-              WidgetsGertec.buttonStandard("CONSULTAR SAT", callback: () => testeSat("ConsultarSat")),
-              WidgetsGertec.buttonStandard("STATUS OPERACIONAL", callback: () => testeSat("ConsultarStatusOperacional")),
-              WidgetsGertec.buttonStandard("TESTE FIM A FIM", callback: () => testeSat("EnviarTesteFim")),
-              WidgetsGertec.buttonStandard("ENVIAR DADOS DE VENDA", callback: () => testeSat("EnviarTesteVendas")),
+              WidgetsGertec.buttonStandard("CONSULTAR SAT",
+                  callback: () => testeSat("ConsultarSat")),
+              WidgetsGertec.buttonStandard("STATUS OPERACIONAL",
+                  callback: () => testeSat("ConsultarStatusOperacional")),
+              WidgetsGertec.buttonStandard("TESTE FIM A FIM",
+                  callback: () => testeSat("EnviarTesteFim")),
+              WidgetsGertec.buttonStandard("ENVIAR DADOS DE VENDA",
+                  callback: () => testeSat("EnviarTesteVendas")),
               WidgetsGertec.buttonStandard(
                 "CANCELAR VENDA",
                 callback: () =>

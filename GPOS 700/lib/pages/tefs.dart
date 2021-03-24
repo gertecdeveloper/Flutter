@@ -94,48 +94,50 @@ class _PageTefState extends State<PageTef> {
   void dialogoTransacaoAprovadaGer7(RetornoGer7 operacaoRetorno) {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Transação Aprovada"),
-        content: Container(
-          height: MediaQuery.of(context).size.height - 20,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: <Widget>[
-              Text("version: " + operacaoRetorno.getVersion),
-              Text("status: " + operacaoRetorno.getStatus),
-              Text("config: " + operacaoRetorno.getConfig),
-              Text("license: " + operacaoRetorno.getLicens),
-              Text("terminal: " + operacaoRetorno.getTerminal),
-              Text("merchant: " + operacaoRetorno.getMerchant),
-              Text("id: " + operacaoRetorno.getId),
-              Text("type: " + operacaoRetorno.getType),
-              Text("product: " + operacaoRetorno.getProduct),
-              Text("response: " + operacaoRetorno.getResponse),
-              Text("authorization: " + operacaoRetorno.getAuthorization),
-              Text("amount: " + operacaoRetorno.getAmount),
-              Text("installments: " + operacaoRetorno.getInstallments),
-              Text("instmode: " + operacaoRetorno.getInstmode),
-              Text("stan: " + operacaoRetorno.getStan),
-              Text("rrn: " + operacaoRetorno.getRrn),
-              Text("time: " + operacaoRetorno.getTime),
-              Text("track2: " + operacaoRetorno.getTrack2),
-              Text("aid: " + operacaoRetorno.getAid),
-              Text("cardholder: " + operacaoRetorno.getCardholder),
-              Text("prefname: " + operacaoRetorno.getPrefname),
-              Text("errcode: " + operacaoRetorno.getErrcode),
-              Text("label: " + operacaoRetorno.getLabel),
-            ],
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Transação Aprovada"),
+          content: Container(
+            height: MediaQuery.of(context).size.height - 20,
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                Text("version: " + operacaoRetorno.getVersion),
+                Text("status: " + operacaoRetorno.getStatus),
+                Text("config: " + operacaoRetorno.getConfig),
+                Text("license: " + operacaoRetorno.getLicens),
+                Text("terminal: " + operacaoRetorno.getTerminal),
+                Text("merchant: " + operacaoRetorno.getMerchant),
+                Text("id: " + operacaoRetorno.getId),
+                Text("type: " + operacaoRetorno.getType),
+                Text("product: " + operacaoRetorno.getProduct),
+                Text("response: " + operacaoRetorno.getResponse),
+                Text("authorization: " + operacaoRetorno.getAuthorization),
+                Text("amount: " + operacaoRetorno.getAmount),
+                Text("installments: " + operacaoRetorno.getInstallments),
+                Text("instmode: " + operacaoRetorno.getInstmode),
+                Text("stan: " + operacaoRetorno.getStan),
+                Text("rrn: " + operacaoRetorno.getRrn),
+                Text("time: " + operacaoRetorno.getTime),
+                Text("track2: " + operacaoRetorno.getTrack2),
+                Text("aid: " + operacaoRetorno.getAid),
+                Text("cardholder: " + operacaoRetorno.getCardholder),
+                Text("prefname: " + operacaoRetorno.getPrefname),
+                Text("errcode: " + operacaoRetorno.getErrcode),
+                Text("label: " + operacaoRetorno.getLabel),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Ok"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
     );
   }
 
@@ -143,28 +145,30 @@ class _PageTefState extends State<PageTef> {
   void dialogoErroGer7(RetornoGer7 operacaoRetorno) {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Transação Negada"),
-        content: Container(
-          height: 150,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("version: " + operacaoRetorno.getVersion),
-              Text("errcode: " + operacaoRetorno.getErrcode),
-              Text("errmsg: " + operacaoRetorno.getErrmsg),
-            ],
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Transação Negada"),
+          content: Container(
+            height: 150,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("version: " + operacaoRetorno.getVersion),
+                Text("errcode: " + operacaoRetorno.getErrcode),
+                Text("errmsg: " + operacaoRetorno.getErrmsg),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Ok"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
     );
   }
 
@@ -172,35 +176,37 @@ class _PageTefState extends State<PageTef> {
   void dialogoTransacaoAprovadaMsitef(RetornoMsiTef operacaoRetorno) {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Transação Aprovada"),
-        content: Container(
-            height: 250,
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: <Widget>[
-                Text("CODRESP: " + operacaoRetorno.getCodResp),
-                Text("COMP_DADOS_CONF: " + operacaoRetorno.getCompDadosConf),
-                Text("CODTRANS: " + operacaoRetorno.getCodTrans),
-                Text("CODTRANS (Name): " + operacaoRetorno.getNameTransCod),
-                Text("VLTROCO: " + operacaoRetorno.getvlTroco),
-                Text("REDE_AUT: " + operacaoRetorno.getRedeAut),
-                Text("BANDEIRA: " + operacaoRetorno.getBandeira),
-                Text("NSU_SITEF: " + operacaoRetorno.getNSUSitef),
-                Text("NSU_HOST: " + operacaoRetorno.getNSUHOST),
-                Text("COD_AUTORIZACAO: " + operacaoRetorno.getCodAutorizacao),
-                Text("NUM_PARC: " + operacaoRetorno.getParcelas)
-              ],
-            )),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Ok"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Transação Aprovada"),
+          content: Container(
+              height: 250,
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: <Widget>[
+                  Text("CODRESP: " + operacaoRetorno.getCodResp),
+                  Text("COMP_DADOS_CONF: " + operacaoRetorno.getCompDadosConf),
+                  Text("CODTRANS: " + operacaoRetorno.getCodTrans),
+                  Text("CODTRANS (Name): " + operacaoRetorno.getNameTransCod),
+                  Text("VLTROCO: " + operacaoRetorno.getvlTroco),
+                  Text("REDE_AUT: " + operacaoRetorno.getRedeAut),
+                  Text("BANDEIRA: " + operacaoRetorno.getBandeira),
+                  Text("NSU_SITEF: " + operacaoRetorno.getNSUSitef),
+                  Text("NSU_HOST: " + operacaoRetorno.getNSUHOST),
+                  Text("COD_AUTORIZACAO: " + operacaoRetorno.getCodAutorizacao),
+                  Text("NUM_PARC: " + operacaoRetorno.getParcelas)
+                ],
+              )),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
     );
   }
 
@@ -208,27 +214,29 @@ class _PageTefState extends State<PageTef> {
   void dialogoErroMsitef(RetornoMsiTef operacaoRetorno) {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Transação Negada"),
-        content: Container(
-          height: 50,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("CODRESP: " + operacaoRetorno.getCodResp),
-              Text("Verique se o ip está correto !")
-            ],
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Transação Negada"),
+          content: Container(
+            height: 50,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("CODRESP: " + operacaoRetorno.getCodResp),
+                Text("Verique se o ip está correto !")
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Ok"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
     );
   }
 
